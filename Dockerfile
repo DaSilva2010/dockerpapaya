@@ -2,7 +2,6 @@ FROM php:5.6-apache
 MAINTAINER Jan Boerner <jan@boerner.xyz>
 
 # install needed tools
-ADD install-composer.sh /install-composer.sh
 RUN apt-get update; \
     apt-get -y install git wget libxslt-dev libmcrypt-dev libpng12-dev libjpeg-dev zip; \
     apt-get clean; \
@@ -13,7 +12,10 @@ RUN apt-get update; \
     echo date.timezone = UTC >> $PHP_INI_DIR/conf.d/docker-php-ext-date.ini
 
 # installing composer
-RUN /install-composer.sh; rm /install-composer.sh
+ADD install-composer.sh /install-composer.sh
+RUN chmod +x /install-composer.sh; \
+    /install-composer.sh; \
+    rm /install-composer.sh
 
 # install phing and xhprof
 RUN pear channel-discover pear.phing.info; \
@@ -45,4 +47,5 @@ ADD papayacms.conf /etc/apache2/sites-available/
 RUN rm /etc/apache2/sites-enabled/*.conf; ln -s /etc/apache2/sites-available/papayacms.conf /etc/apache2/sites-enabled/papayacms.conf; ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
