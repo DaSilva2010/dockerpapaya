@@ -1,5 +1,5 @@
 FROM php:5.6-apache
-MAINTAINER Jan Boerner <jan@boerner.xyz>
+MAINTAINER DaSilva2010 <dasilva2010@arcor.de>
 
 # install needed tools
 RUN apt-get update; \
